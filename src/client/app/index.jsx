@@ -1,20 +1,28 @@
-var $ul = $('#runs');
+import React from 'react';
+import {render} from 'react-dom';
+
+class RunList extends React.Component {
+  render () {
+    return (
+      <ol>
+        {this.props.runs.map((run) => {
+          return <li key={run.id}>
+                    <a data-start={run.start_latlng}
+                       data-polyline={run.map.summary_polyline}>
+                      {run.name}
+                    </a>
+                  </li>
+        })}
+      </ol>
+    )
+  }
+}
+
 var myLatlng = new google.maps.LatLng(40, -74);
 var map = new google.maps.Map(document.getElementById('map'), {center: myLatlng});
 
 $.get('/runs', function (runs) {
-  runs.forEach(function (run) {
-    var $li = $('<li>');
-    var $a = $('<a target="_blank">');
-    var link = 'https://www.strava.com/activities/';
-
-    $a.html(run.name);
-    $a.attr('href', link + run.id)
-      .data('start', run.start_latlng)
-      .data('polyline', run.map.summary_polyline);
-
-    $ul.append($li.append($a));
-  });
+  render(<RunList runs={runs}/>, document.getElementById('runs'))
 });
 
 $('#runs').on('click', 'a', function (e) {
@@ -22,7 +30,7 @@ $('#runs').on('click', 'a', function (e) {
   $('#map').addClass('active');
 
   var polyline = $(e.currentTarget).data('polyline');
-  var startLatLng = $(e.currentTarget).data('start');
+  var startLatLng = $(e.currentTarget).data('start').split(',');
 
   var myLatlng = new google.maps.LatLng(startLatLng[0], startLatLng[1]);
 

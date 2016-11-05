@@ -2,10 +2,10 @@ var express = require('express');
 var app = express();
 var strava = require('strava-v3');
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/src/client'));
 
 app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/public/index.html');
+  res.sendfile(__dirname + '/src/client/index.html');
 });
 
 app.get('/runs', function (req, res) {

@@ -1,0 +1,15 @@
+{
+  "name": "philly-marathon",
+  "version": "1.0.0",
+  "description": "Strava tracker application with google maps",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node app.js"
+  },
+  "author": "Philip London",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.14.0"
+  }
+}

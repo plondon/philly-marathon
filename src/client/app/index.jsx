@@ -18,12 +18,15 @@ export default function Map (props) {
           <GoogleMap
             ref={(map) => console.log(map)}
             defaultZoom={13}
-            defaultCenter={{ lat: props.run.start_latlng[0], lng: props.run.start_latlng[1] }}
+            center={{ lat: props.run.start_latlng[0], lng: props.run.start_latlng[1] }}
             onClick={props.onMapClick}
           >
             <Polyline
               path={decodePath(props.run.map.summary_polyline)}
               levels={decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')}
+              strokeColor={'#e1f5fe'}
+              strokeOpacity={1.0}
+              strokeWeight={2}
             />
           </GoogleMap>
         }
@@ -44,12 +47,10 @@ class Run extends React.Component {
 
   render () {
     var name = this.props.run.name;
-    var date = this.props.run.date;
-    var start = this.props.run.start_latlng;
-    var polyline = this.props.run.map.summary_polyline;
+    var date = this.props.run.start_date_local;
 
     return (
-      <a onClick={this.handleClick}>{name}</a>
+      <a onClick={this.handleClick}>{name} {getDate(date)}</a>
     )
   }
 }
@@ -68,6 +69,24 @@ class RunList extends React.Component {
                   </li>
         })}
       </ol>
+    )
+  }
+}
+
+class RunStats extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render () {
+   return (
+      <div>
+        <h2>{this.props.run.name} Stats</h2>
+        <ul>
+          <li>{getDate(this.props.run.start_date_local)}</li>
+          <li>{getDistance(this.props.run.distance)}</li>
+        </ul>
+      </div>
     )
   }
 }
@@ -94,6 +113,7 @@ $.get('/runs', function (runs) {
         <div>
           <RunList runs={runs} onRunChange={this.handleRunChange}/>
           <Map run={this.state.run}/>
+          <RunStats run={this.state.run}/>
         </div>
       )
     }
@@ -101,6 +121,10 @@ $.get('/runs', function (runs) {
 
   render(<RunTracker/>, document.getElementById('main'))
 });
+
+$.get('/beacon', function (beacon) {
+  console.log(beacon);
+})
 
 function decodePath (pathString) {
   return google.maps.geometry.encoding.decodePath(pathString);
@@ -114,4 +138,14 @@ function decodeLevels (encodedLevelsString) {
     decodedLevels.push(level);
   }
   return decodedLevels;
+}
+
+function getDistance (meters) {
+  return (meters / 1609.34).toFixed(2) + ' Miles';
+}
+
+function getDate (date) {
+  var d = new Date(date);
+
+  return d.getMonth() + 1 + '/' + d.getDate() + '/' + d.getFullYear();
 }

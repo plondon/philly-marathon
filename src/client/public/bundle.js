@@ -92,12 +92,15 @@
 	            return console.log(map);
 	          },
 	          defaultZoom: 13,
-	          defaultCenter: { lat: props.run.start_latlng[0], lng: props.run.start_latlng[1] },
+	          center: { lat: props.run.start_latlng[0], lng: props.run.start_latlng[1] },
 	          onClick: props.onMapClick
 	        },
 	        _react2.default.createElement(_reactGoogleMaps.Polyline, {
 	          path: decodePath(props.run.map.summary_polyline),
-	          levels: decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
+	          levels: decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'),
+	          strokeColor: '#e1f5fe',
+	          strokeOpacity: 1.0,
+	          strokeWeight: 2
 	        })
 	      )
 	    })
@@ -125,14 +128,14 @@
 	    key: 'render',
 	    value: function render() {
 	      var name = this.props.run.name;
-	      var date = this.props.run.date;
-	      var start = this.props.run.start_latlng;
-	      var polyline = this.props.run.map.summary_polyline;
+	      var date = this.props.run.start_date_local;
 	
 	      return _react2.default.createElement(
 	        'a',
 	        { onClick: this.handleClick },
-	        name
+	        name,
+	        ' ',
+	        getDate(date)
 	      );
 	    }
 	  }]);
@@ -171,21 +174,63 @@
 	  return RunList;
 	}(_react2.default.Component);
 	
+	var RunStats = function (_React$Component3) {
+	  _inherits(RunStats, _React$Component3);
+	
+	  function RunStats(props) {
+	    _classCallCheck(this, RunStats);
+	
+	    return _possibleConstructorReturn(this, (RunStats.__proto__ || Object.getPrototypeOf(RunStats)).call(this, props));
+	  }
+	
+	  _createClass(RunStats, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          this.props.run.name,
+	          ' Stats'
+	        ),
+	        _react2.default.createElement(
+	          'ul',
+	          null,
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            getDate(this.props.run.start_date_local)
+	          ),
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            getDistance(this.props.run.distance)
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return RunStats;
+	}(_react2.default.Component);
+	
 	$.get('/runs', function (runs) {
-	  var RunTracker = function (_React$Component3) {
-	    _inherits(RunTracker, _React$Component3);
+	  var RunTracker = function (_React$Component4) {
+	    _inherits(RunTracker, _React$Component4);
 	
 	    function RunTracker(props) {
 	      _classCallCheck(this, RunTracker);
 	
-	      var _this4 = _possibleConstructorReturn(this, (RunTracker.__proto__ || Object.getPrototypeOf(RunTracker)).call(this, props));
+	      var _this5 = _possibleConstructorReturn(this, (RunTracker.__proto__ || Object.getPrototypeOf(RunTracker)).call(this, props));
 	
-	      _this4.state = {
+	      _this5.state = {
 	        run: runs[0]
 	      };
 	
-	      _this4.handleRunChange = _this4.handleRunChange.bind(_this4);
-	      return _this4;
+	      _this5.handleRunChange = _this5.handleRunChange.bind(_this5);
+	      return _this5;
 	    }
 	
 	    _createClass(RunTracker, [{
@@ -202,7 +247,8 @@
 	          'div',
 	          null,
 	          _react2.default.createElement(RunList, { runs: runs, onRunChange: this.handleRunChange }),
-	          _react2.default.createElement(Map, { run: this.state.run })
+	          _react2.default.createElement(Map, { run: this.state.run }),
+	          _react2.default.createElement(RunStats, { run: this.state.run })
 	        );
 	      }
 	    }]);
@@ -211,6 +257,10 @@
 	  }(_react2.default.Component);
 	
 	  (0, _reactDom.render)(_react2.default.createElement(RunTracker, null), document.getElementById('main'));
+	});
+	
+	$.get('/beacon', function (beacon) {
+	  console.log(beacon);
 	});
 	
 	function decodePath(pathString) {
@@ -225,6 +275,16 @@
 	    decodedLevels.push(level);
 	  }
 	  return decodedLevels;
+	}
+	
+	function getDistance(meters) {
+	  return (meters / 1609.34).toFixed(2) + ' Miles';
+	}
+	
+	function getDate(date) {
+	  var d = new Date(date);
+	
+	  return d.getMonth() + 1 + '/' + d.getDate() + '/' + d.getFullYear();
 	}
 
 /***/ },

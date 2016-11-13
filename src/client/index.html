@@ -2,16 +2,132 @@
 <html>
 <head>
   <title>Phil's Run Tracker</title>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <script src="https://use.fontawesome.com/7390f7106e.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script type="text/javascript" src="https://maps.google.com/maps/api/js?libraries=geometry&key=AIzaSyAKe6ZPqhgbe_oYAgXzf25JYGbkWk4ZNxE"></script>
   <style type="text/css">
+    /* http://meyerweb.com/eric/tools/css/reset/ 
+       v2.0 | 20110126
+       License: none (public domain)
+    */
+
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed, 
+    figure, figcaption, footer, header, hgroup, 
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      vertical-align: baseline;
+    }
+    /* HTML5 display-role reset for older browsers */
+    article, aside, details, figcaption, figure, 
+    footer, header, hgroup, menu, nav, section {
+      display: block;
+    }
+    body {
+      line-height: 1;
+    }
+    ol, ul {
+      list-style: none;
+    }
+    blockquote, q {
+      quotes: none;
+    }
+    blockquote:before, blockquote:after,
+    q:before, q:after {
+      content: '';
+      content: none;
+    }
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    html, body {
+      font-family: 'Raleway', sans-serif;
+    }
+
     section {
-      top: 0;
-      left: 0;
+      top: 0px;
+      left: 0px;
       width: 100%;
       height: 100%;
       z-index: -1;
+      transition: left 0.3s;
       position: fixed !important;
+    }
+
+    .nav {
+      transition: left 0.3s 0.1s;
+      background: #1e1e1e;
+      position: fixed;
+      padding: 15px;
+      color: white;
+      height: 100%;
+      width: 250px;
+      left: -280px;
+      top: 0;
+    }
+
+    .nav.active {
+      left: 0;
+    }
+
+    .nav .fa-bars {
+      transition: all 0.3s 0.1s;
+      position: fixed;
+      font-size: 30px;
+      color: #1e1e1e;
+      left: 15px;
+      top: 45px;
+    }
+
+    .nav.active .fa-bars {
+      top: 20px;
+      left: 250px;
+      color: white;
+      font-size: 20px;
+    }
+
+    .nav.active ~ section {
+      left: 250px;
+    }
+
+    .nav li {
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    .nav li.active {
+      color: #14bfff;
+    }
+
+    .active-run {
+      background: #1e1e1e;
+      position: fixed;
+      padding: 15px;
+      color: #14bfff;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+    }
+
+    .active-run * {
+      font-size: 20px;
     }
   </style>
 </head>

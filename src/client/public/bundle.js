@@ -149,21 +149,50 @@
 	  function RunList(props) {
 	    _classCallCheck(this, RunList);
 	
-	    return _possibleConstructorReturn(this, (RunList.__proto__ || Object.getPrototypeOf(RunList)).call(this, props));
+	    var _this2 = _possibleConstructorReturn(this, (RunList.__proto__ || Object.getPrototypeOf(RunList)).call(this, props));
+	
+	    _this2.state = {
+	      active: false
+	    };
+	
+	    _this2.toggleNav = _this2.toggleNav.bind(_this2);
+	    return _this2;
 	  }
 	
 	  _createClass(RunList, [{
+	    key: 'isActive',
+	    value: function isActive(id) {
+	      return id === this.props.run.id;
+	    }
+	  }, {
+	    key: 'toggleNav',
+	    value: function toggleNav() {
+	      this.setState({
+	        active: !this.state.active
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this3 = this;
 	
 	      return _react2.default.createElement(
 	        'ol',
-	        null,
+	        { className: this.state.active ? 'nav active' : 'nav' },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          this.active
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          { onClick: this.toggleNav },
+	          _react2.default.createElement('i', { className: 'fa fa-bars', 'aria-hidden': 'true' })
+	        ),
 	        this.props.runs.map(function (run) {
 	          return _react2.default.createElement(
 	            'li',
-	            { key: run.id },
+	            { key: run.id, className: _this3.isActive(run.id) ? 'active' : '' },
 	            _react2.default.createElement(Run, { run: run, onRunChange: _this3.props.onRunChange })
 	          );
 	        })
@@ -246,9 +275,13 @@
 	        return _react2.default.createElement(
 	          'div',
 	          null,
-	          _react2.default.createElement(RunList, { runs: runs, onRunChange: this.handleRunChange }),
-	          _react2.default.createElement(Map, { run: this.state.run }),
-	          _react2.default.createElement(RunStats, { run: this.state.run })
+	          _react2.default.createElement(RunList, { runs: runs, run: this.state.run, onRunChange: this.handleRunChange }),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'active-run' },
+	            _react2.default.createElement(RunStats, { run: this.state.run })
+	          ),
+	          _react2.default.createElement(Map, { run: this.state.run })
 	        );
 	      }
 	    }]);

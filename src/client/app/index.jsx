@@ -58,13 +58,30 @@ class Run extends React.Component {
 class RunList extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      active: false
+    }
+    
+    this.toggleNav = this.toggleNav.bind(this)
+  }
+
+  isActive(id) {
+    return id === this.props.run.id;
+  }
+
+  toggleNav() {
+    this.setState({
+      active: !this.state.active
+    })
   }
 
   render () {
     return (
-      <ol>
+      <ol className={this.state.active ? 'nav active' : 'nav'}>
+        <li>{this.active}</li>
+        <li onClick={this.toggleNav}><i className="fa fa-bars" aria-hidden="true"></i></li>
         {this.props.runs.map((run) => {
-          return <li key={run.id}>
+          return <li key={run.id} className={this.isActive(run.id) ? 'active' : ''}>
                     <Run run={run} onRunChange={this.props.onRunChange}/>
                   </li>
         })}
@@ -111,9 +128,11 @@ $.get('/runs', function (runs) {
     render () {
       return (
         <div>
-          <RunList runs={runs} onRunChange={this.handleRunChange}/>
+          <RunList runs={runs} run={this.state.run} onRunChange={this.handleRunChange}/>
+          <div className="active-run">
+            <RunStats run={this.state.run}/>
+          </div>
           <Map run={this.state.run}/>
-          <RunStats run={this.state.run}/>
         </div>
       )
     }
@@ -125,6 +144,7 @@ $.get('/runs', function (runs) {
 $.get('/beacon', function (res) {
   console.log(res);
 });
+
 
 function decodePath (pathString) {
   return google.maps.geometry.encoding.decodePath(pathString);

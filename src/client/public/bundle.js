@@ -259,8 +259,8 @@
 	  (0, _reactDom.render)(_react2.default.createElement(RunTracker, null), document.getElementById('main'));
 	});
 	
-	$.get('/beacon', function (beacon) {
-	  console.log(beacon);
+	$.get('/beacon', function (res) {
+	  console.log(res);
 	});
 	
 	function decodePath(pathString) {

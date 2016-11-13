@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var strava = require('strava-v3');
-var stravaUtil = require('strava-v3/lib/util');
+var strava_util = require('strava-v3/lib/util');
 
 app.use(express.static(__dirname + '/src/client'));
 
@@ -17,7 +17,7 @@ app.get('/runs', function (req, res) {
 });
 
 app.get('/beacon', function (req, res) {
-  return stravaUtil.postEndpoint('/beacon', {}, function (err, payload) {
+  return strava_util.getEndpoint('beacon/status', {}, function (err, payload) {
     if (!err) res.send(payload);
     else res.send(err);
   });

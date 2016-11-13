@@ -1,6 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
-import {GoogleMapLoader, GoogleMap, Polyline} from "react-google-maps";
+import {GoogleMapLoader, GoogleMap, Polyline} from 'react-google-maps';
 
 export default function Map (props) {
   return (
@@ -122,9 +122,9 @@ $.get('/runs', function (runs) {
   render(<RunTracker/>, document.getElementById('main'))
 });
 
-$.get('/beacon', function (beacon) {
-  console.log(beacon);
-})
+$.get('/beacon', function (res) {
+  console.log(res);
+});
 
 function decodePath (pathString) {
   return google.maps.geometry.encoding.decodePath(pathString);
